@@ -7,7 +7,11 @@ const app = express();
 const admin = require("firebase-admin");
 const port = process.env.PORT || 3000;
 
-const serviceAccount = require("./smart-deals-firebase-admin-key.json");
+const decoded = Buffer.from(
+  process.env.FIREBASE_SERVICE_KEY,
+  "base64"
+).toString("utf8");
+const serviceAccount = JSON.parse(decoded);
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
@@ -138,7 +142,6 @@ async function run() {
       res.send(result);
     });
 
-    //mara
 
     app.get("/products/:id", async (req, res) => {
       const id = req.params.id;
@@ -147,7 +150,7 @@ async function run() {
       res.send(result);
     });
 
-    app.post("/products",verifyFireBaseToken, async (req, res) => {
+    app.post("/products", verifyFireBaseToken, async (req, res) => {
       const newProduct = req.body;
       const result = await productsCollection.insertOne(newProduct);
       res.send(result);
@@ -223,8 +226,6 @@ async function run() {
       }
     );
 
-
-
     app.post("/bids", async (req, res) => {
       const newBid = req.body;
       const result = await bidsCollection.insertOne(newBid);
@@ -238,19 +239,19 @@ async function run() {
       res.send(result);
     });
 
-    await client.db("admin").command({ ping: 1 });
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
-    );
+    // await client.db("admin").command({ ping: 1 });
+    // console.log(
+    //   "Pinged your deployment. You successfully connected to MongoDB!"
+    // );
   } finally {
   }
 }
 
 run().catch(console.dir);
 
-app.listen(port, () => {
-  console.log(`Smart server is running on port: ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`Smart server is running on port: ${port}`);
+// });
 
 // client.connect()
 //     .then(() => {
