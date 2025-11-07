@@ -1,12 +1,18 @@
 import React, { use, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { AuthContext } from "../Context/AuthContext";
+// import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const MyBids = () => {
   const { user } = use(AuthContext);
   const [bids, setBids] = useState([]);
-
-  console.log("token", user.accessToken);
+  // const axiosSecure = useAxiosSecure();
+  // console.log("token", user.accessToken);
+  // useEffect(() => {
+  //   axiosSecure.get(`/bids?email=${user.email}`).then((data) => {
+  //     setBids(data.data);
+  //   });
+  // }, [user, axiosSecure]);
 
   useEffect(() => {
     if (user?.email) {

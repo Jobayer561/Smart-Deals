@@ -6,9 +6,7 @@ const Navbar = () => {
   const { user, signOutUser } = use(AuthContext);
 
   const handleSignOut = () => {
-    signOutUser()
-    .then()
-    .catch();
+    signOutUser().then().catch();
   };
 
   const links = (
@@ -26,6 +24,9 @@ const Navbar = () => {
           </li>
           <li>
             <NavLink to="/myBids">My Bids</NavLink>
+          </li>
+          <li>
+            <NavLink to="/createAProduct">Create A Product</NavLink>
           </li>
         </>
       )}

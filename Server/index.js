@@ -22,10 +22,11 @@ const logger = (req, res, next) => {
 };
 
 const verifyFireBaseToken = async (req, res, next) => {
-  if (!req.headers.authorization) {
+  const authorization = req.headers.authorization;
+  if (!authorization) {
     return res.status(401).send({ message: "unauthorized access" });
   }
-  const token = req.headers.authorization.split(" ")[1];
+  const token = authorization.split(" ")[1];
   if (!token) {
     return res.status(401).send({ message: "unauthorized access" });
   }
@@ -146,7 +147,7 @@ async function run() {
       res.send(result);
     });
 
-    app.post("/products", async (req, res) => {
+    app.post("/products",verifyFireBaseToken, async (req, res) => {
       const newProduct = req.body;
       const result = await productsCollection.insertOne(newProduct);
       res.send(result);
@@ -222,16 +223,7 @@ async function run() {
       }
     );
 
-    app.get("/bids", async (req, res) => {
-      const query = {};
-      if (query.email) {
-        query.buyer_email = email;
-      }
 
-      const cursor = bidsCollection.find(query);
-      const result = await cursor.toArray();
-      res.send(result);
-    });
 
     app.post("/bids", async (req, res) => {
       const newBid = req.body;
